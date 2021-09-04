@@ -17,13 +17,13 @@ int main(int argc, char** argv) {
 
     }
     int coma = 0, largo=0, ancho=0, aux;
-    char caracter[20];
+    char caracter[59];
     char *token;
     while (fgets(caracter, sizeof (caracter), Datos)) {
 
         token = strtok(caracter, ",");
         
-        if (coma > 3) {
+         if (coma > 1) {
             while (token != NULL) {
                    switch (ancho){
                    case 0:
