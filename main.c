@@ -2,10 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-struct Pelicua{
-    char Carnet[6];
-    int TheGodfather, TokyoDrift, SpiritedAway, Tenet, TheGrandBudapestHotel, Frozen;
-}Peliculas[6][58], *puntero;
+
+struct Pelicua {
+    int Matriz[5][58];
+    int MatrizInversa[58][5];
+    int MultiploDeMatrices[58][58];
+} Peliculas;
 
 int main(int argc, char** argv) {
     // Creamos un obejto para poder abrir archivo de texto
@@ -16,70 +18,40 @@ int main(int argc, char** argv) {
         return 1;
 
     }
-    int coma = 0, largo=0, ancho=0, aux;
+    int coma = 0, largo = 0, ancho = 0, aux;
     char caracter[59];
     char *token;
     while (fgets(caracter, sizeof (caracter), Datos)) {
 
         token = strtok(caracter, ",");
-        
-         if (coma > 1) {
+
+        if (coma > 1) {
             while (token != NULL) {
-                   switch (ancho){
-                   case 0:
-                        strcpy(Peliculas[ancho][largo].Carnet, token);
-                        printf("guardo exitoso el valor %s", Peliculas[ancho][largo].Carnet);
-                        break;
-                    case 1:
-                        aux =  strtol(token, NULL, 10);
-                        Peliculas[ancho][largo].TheGodfather = aux;
-                        printf("guardo exitoso el valor %i", Peliculas[ancho][largo].TheGodfather);
-                        break;
-                    case 2:
-                        aux = (int) strtol(token, NULL, 10);
-                        Peliculas[ancho][largo].TokyoDrift = aux;
-                        printf("guardo exitoso el valor %d", Peliculas[ancho][largo].TokyoDrift);
-                        break;
-                    case 3:
-                        aux = (int) strtol(token, NULL, 10);
-                        Peliculas[ancho][largo].SpiritedAway = aux;
-                        printf("guardo exitoso el valor %d", Peliculas[ancho][largo].SpiritedAway);
-                        break;
-                    case 4:                        
-                        aux = (int) strtol(token, NULL, 10);
-                        Peliculas[ancho][largo].Tenet = aux;
-                        printf("guardo exitoso el valor %d", Peliculas[ancho][largo].Tenet);
-                        break;
-                    case 5: 
-                        aux = (int) strtol(token, NULL, 10);
-                        Peliculas[ancho][largo].TheGrandBudapestHotel = aux;
-                        printf("guardo exitoso el valor %d", Peliculas[ancho][largo].TheGrandBudapestHotel);
-                        break;
-                    case 6:
-                        aux = (int) strtol(token, NULL, 10);
-                        Peliculas[ancho][largo].Frozen = aux;
-                        printf("guardo exitoso el valor %d", Peliculas[ancho][largo].TheGodfather);
-                        break;
-                    default:
-                        break;                        
-                }
-                   printf("\n");
+                if (coma == 2 && ancho == 2) {
                     token = strtok(NULL, ",");
-                
-                    ancho++;
-                
+                }
+                if (ancho >= 1) {
+                    aux = strtol(token, NULL, 10);
+                    Peliculas.Matriz[ancho][largo] = aux;
+                    Peliculas.MatrizInversa[largo][ancho] = aux
+                            printf("%d ", Peliculas.Matriz[ancho][largo]);
+
+                    printf("\t");
+                }
+                ancho++;
+                token = strtok(NULL, ",");
             }
             printf("\n");
-        } 
-        else {
+        } else {
             token = strtok(NULL, ",");
+            ancho++;
         }
         coma++;
-        if(ancho>=6){
+        if (ancho >= 5) {
             largo++;
-            ancho=0;
+            ancho = 0;
         }
-        
+
     }
     fclose(Datos);
 
