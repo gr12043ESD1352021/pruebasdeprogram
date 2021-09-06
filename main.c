@@ -34,41 +34,30 @@ int main(int argc, char** argv) {
         while (token != NULL) {          
             if(ancho==0 ){token = strtok(NULL, ",");}
             else if(ancho>0){
-                printf("token%s\n",token);
                 aux = strtol(token,NULL, 10);
                 if(aux!=0){
-                printf(" valor de aux   %d\n", aux);
                 Peliculas.Matriz[ancho-1][largo]=aux;
-                printf(" valor de matriz   %d\n", Peliculas.Matriz[ancho-1][largo]);
-                Peliculas.MatrizInversa[largo][ancho-1]=aux;
-                
                 }
                 else{
-                printf(" valor de aux   %d\n", 0);
                 Peliculas.Matriz[ancho-1][largo]=0;
-                printf(" valor de matriz   %d\n", Peliculas.Matriz[ancho-1][largo]);
                 Peliculas.MatrizInversa[largo][ancho-1]=0;}
                 token = strtok(NULL, ",");                
             }  
             ancho++;
         }
         
-        }else if(coma<=1){token = strtok(NULL, ",");printf("a la mierda\n");}
+        }else if(coma<=1){token = strtok(NULL, ",");}
         
         coma++;
         
-        if(coma>1 && ancho==7){
+        if(coma>1 && ancho>=6){
             largo++;
             ancho=0;
         }
     }
-    
-
-    printf("\n\nSe ha leido el archivo.\n");
-    
     for (int a=0; a<=58;a++){
      for(int b=0; b<=5;b++ ){
-          printf("%i\t", Peliculas.Matriz[b][a]);
+          printf("%i\t", Peliculas.MatrizInversa[a][b]);
      }
      printf("\n");
 }
