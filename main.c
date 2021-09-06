@@ -1,24 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <io.h>
 
 struct Pelicua {
     /*arreglando matriz*/
-    int Matriz[6][59];
-    int MatrizInversa[59][6];
-    int MultiploDeMatrices[59][59];
+    int **Matriz;
+    int **MatrizInversa;
+    int **MultiploDeMatrices;
 } Peliculas;
 
 int main(int argc, char** argv) {
-    const char* integrantes("pc19089");
+
+    Peliculas.Matriz = (int**) malloc(6 * sizeof (int));
+    Peliculas.MatrizInversa = (int**) malloc(58 * sizeof (int*));
+    Peliculas.MultiploDeMatrices = (int**) malloc(58 * sizeof (int*));
+
     // Creamos un obejto para poder abrir archivo de texto
     FILE *Datos = fopen("peliculasFavoritasESD135_2021.csv", "r");
     //Validamos ejecucion de lectura de archivo.
     if (Datos == NULL) {
         perror("Error al abrir archivo.");
         return 1;
-
     }
+
+
     for (int largo = 0; largo < 59; largo++) {
         for (int ancho = 0; ancho < 6; ancho++) {
             Peliculas.MatrizInversa[largo][ancho] = 0;
@@ -30,6 +36,7 @@ int main(int argc, char** argv) {
             Peliculas.MultiploDeMatrices[largo][ancho] = 0;
         }
     }
+
     int coma = 0, largo = 0, ancho = 0, aux;
     char caracter[60];
     char *token;
@@ -39,15 +46,17 @@ int main(int argc, char** argv) {
 
         if (coma > 1) {
             while (token != NULL) {
+
                 if (ancho == 0) {
                     token = strtok(NULL, ",");
-                    } else if (ancho > 0) {
+                } else if (ancho > 0) {
                     aux = strtol(token, NULL, 10);
                     if (aux != 0) {
-                        Peliculas.Matriz[ancho - 1][largo] = aux;
-                    } else {
+                        Peliculas.Matriz[ancho-1] = (int*) malloc((largo) * sizeof (int));
                         Peliculas.Matriz[ancho - 1][largo] = 0;
-                        Peliculas.MatrizInversa[largo][ancho - 1] = 0;
+                    } else {
+                        Peliculas.Matriz[ancho-1] = (int*) malloc((largo) * sizeof (int));
+                        Peliculas.Matriz[ancho - 1][largo] = 0;
                     }
                     token = strtok(NULL, ",");
                 }
@@ -63,6 +72,7 @@ int main(int argc, char** argv) {
         if (coma > 1 && ancho >= 6) {
             largo++;
             ancho = 0;
+
         }
     }
     for (int a = 0; a < 59; a++) {
@@ -75,13 +85,18 @@ int main(int argc, char** argv) {
     LlenandoInversa();
     printf("\n\n");
     MultiplicandoMatriz();
+    free(Peliculas.Matriz);
+    free(Peliculas.MatrizInversa);
+    free(Peliculas.MultiploDeMatrices);
     fclose(Datos);
     return 0;
 }
 
 void LlenandoInversa() {
+
     for (int a = 0; a < 59; a++) {
         for (int b = 0; b < 6; b++) {
+            Peliculas.MatrizInversa[a] = (int*) malloc(b * sizeof (int));
             Peliculas.MatrizInversa[a][b] = Peliculas.Matriz[b][a];
         }
     }
@@ -95,9 +110,11 @@ void LlenandoInversa() {
 }
 
 void MultiplicandoMatriz() {
-    for (int largoMult = 0; largoMult <59; largoMult++) {
+
+    for (int largoMult = 0; largoMult < 59; largoMult++) {
         for (int largo = 0; largo < 59; largo++) {
-            for (int ancho = 0; ancho <6; ancho++) {
+            for (int ancho = 0; ancho < 6; ancho++) {
+                Peliculas.MultiploDeMatrices[largoMult] = (int*) malloc(largo * sizeof (int));
                 Peliculas.MultiploDeMatrices[largoMult][largo] += Peliculas.Matriz[ancho][largoMult] * Peliculas.MatrizInversa[largo][ancho];
             }
         }
@@ -111,3 +128,4 @@ void MultiplicandoMatriz() {
         printf("\n");
     }
 }
+
