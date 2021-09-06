@@ -2,12 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-struct Pelicua {
-    int Matriz[5][58];
-    int MatrizInversa[58][5];
-    int MultiploDeMatrices[58][58];
-} Peliculas;
+ struct Pelicua{
+     int Matriz[5][58];
+     int MatrizInversa[58][5];
+     int MultiploDeMatrices[58][58];
+}Peliculas;
 
 int main(int argc, char** argv) {
     // Creamos un obejto para poder abrir archivo de texto
@@ -18,44 +17,62 @@ int main(int argc, char** argv) {
         return 1;
 
     }
-    int coma = 0, largo = 0, ancho = 0, aux;
+    for(int largo=0;largo<=58;largo++){
+        for(int ancho=0;ancho<=5;ancho++){
+            Peliculas.MatrizInversa[largo][ancho]=0;
+            Peliculas.Matriz[ancho][largo]=0;
+        }
+    }
+    int coma = 0, largo=0, ancho=0, aux;
     char caracter[59];
     char *token;
     while (fgets(caracter, sizeof (caracter), Datos)) {
 
         token = strtok(caracter, ",");
-
-        if (coma > 1) {
-            while (token != NULL) {
-                if (coma == 2 && ancho == 2) {
-                    token = strtok(NULL, ",");
+        
+        if(coma>1){
+        while (token != NULL) {          
+            if(ancho==0 ){token = strtok(NULL, ",");}
+            else if(ancho>0){
+                printf("token%s\n",token);
+                aux = strtol(token,NULL, 10);
+                if(aux!=0){
+                printf(" valor de aux   %d\n", aux);
+                Peliculas.Matriz[ancho-1][largo]=aux;
+                printf(" valor de matriz   %d\n", Peliculas.Matriz[ancho-1][largo]);
+                Peliculas.MatrizInversa[largo][ancho-1]=aux;
+                
                 }
-                if (ancho >= 1) {
-                    aux = strtol(token, NULL, 10);
-                    Peliculas.Matriz[ancho][largo] = aux;
-                    Peliculas.MatrizInversa[largo][ancho] = aux
-                            printf("%d ", Peliculas.Matriz[ancho][largo]);
-
-                    printf("\t");
-                }
-                ancho++;
-                token = strtok(NULL, ",");
-            }
-            printf("\n");
-        } else {
-            token = strtok(NULL, ",");
+                else{
+                printf(" valor de aux   %d\n", 0);
+                Peliculas.Matriz[ancho-1][largo]=0;
+                printf(" valor de matriz   %d\n", Peliculas.Matriz[ancho-1][largo]);
+                Peliculas.MatrizInversa[largo][ancho-1]=0;}
+                token = strtok(NULL, ",");                
+            }  
             ancho++;
         }
+        
+        }else if(coma<=1){token = strtok(NULL, ",");printf("a la mierda\n");}
+        
         coma++;
-        if (ancho >= 5) {
+        
+        if(coma>1 && ancho==7){
             largo++;
-            ancho = 0;
+            ancho=0;
         }
-
     }
-    fclose(Datos);
+    
 
-    printf("\n\nSe ha leido el archivo.");
+    printf("\n\nSe ha leido el archivo.\n");
+    
+    for (int a=0; a<=58;a++){
+     for(int b=0; b<=5;b++ ){
+          printf("%i\t", Peliculas.Matriz[b][a]);
+     }
+     printf("\n");
+}
+    fclose(Datos);
     return 0;
 }
 
