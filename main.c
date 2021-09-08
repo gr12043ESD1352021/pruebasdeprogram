@@ -5,15 +5,12 @@
 struct Pelicula {
     /*arreglando matriz*/
     int Matriz[6][59];
-    //    int MatrizInversa[59][6];
-    //    int MultiploDeMatrices[59][59];
 } Peliculas;
 
 int main(int argc, char** argv) {
     Integrantes();
-    // Creamos un obejto para poder abrir archivo de texto
+    // Creamos un obejto para poder abrir archivo de texto.
     FILE *Datos = fopen("peliculasFavoritasESD135_2021.csv", "r");
-
     //Validamos ejecucion de lectura de archivo.
     if (Datos == NULL) {
         perror("Error al abrir archivo.");
@@ -27,7 +24,7 @@ int main(int argc, char** argv) {
 }
 
 void LlenandoMatriz(FILE *Datos) {
-
+    //Iniciamos a llenar matriz con los datos del CSV.
     int coma = 0, largo = 0, ancho = 0, aux;
     char caracter[60];
     char *token;
@@ -64,6 +61,7 @@ void LlenandoMatriz(FILE *Datos) {
         printf("\n");
     }
     printf("\n\n");
+    free(token);
 }
 
 void LlenandoInversa() {
@@ -74,7 +72,6 @@ void LlenandoInversa() {
         return 1;
     }
     for (int largo = 0; largo < 59; largo++) {
-
         for (int ancho = 0; ancho < 6; ancho++) {
             MatrizInversa[largo] = (int*) malloc(ancho * sizeof (int));
             if (MatrizInversa[largo] == NULL) {
@@ -91,11 +88,17 @@ void LlenandoInversa() {
     for (int b = 0; b < 6; b++) {
         for (int a = 0; a < 59; a++) {
             printf("%i ", Peliculas.Matriz[b][a]);
-
         }
         printf("\n");
     }
-    MultiplicandoMatriz(**MatrizInversa);
+    printf("\n\n");
+    MultiplicandoMatriz(MatrizInversa);
+    //Liberamos memoria de puntero.
+    for (int b = 0; b < 59; b++) {
+        for (int a = 0; a < 6; a++) {
+            free(MatrizInversa[a][b]);
+        }
+    }
 }
 
 void MultiplicandoMatriz(int **MatrizInversa) {
@@ -125,12 +128,23 @@ void MultiplicandoMatriz(int **MatrizInversa) {
     for (int b = 0; b < 59; b++) {
         for (int a = 0; a < 59; a++) {
             if (a == b) {
-                printf("n  ");
+                printf("NL ");
             } else {
                 printf("%i  ", MultiploDeMatrices[b][a]);
             }
         }
         printf("\n");
+    }
+    //Liberamos memoria de los punteros.
+    for (int b = 0; b < 59; b++) {
+        for (int a = 0; a < 6; a++) {
+            free(MatrizInversa[a][b]);
+        }
+    }
+    for (int b = 0; b < 59; b++) {
+        for (int a = 0; a < 59; a++) {
+            free(MultiploDeMatrices[a][b]);
+        }
     }
 }
 
